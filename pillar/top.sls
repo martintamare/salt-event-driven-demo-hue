@@ -1,3 +1,3 @@
 base:
-  'raspberrypi':
-    - raspberrypi
+  'demo':
+    - demo

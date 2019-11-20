@@ -6,6 +6,7 @@ hue_reactor:
     - lights: {{ data['lights'] }}
 #}
 
+{#
 {% for id, state in data['lights'].items() %}
 switch_light_{{ id }}_on:
   local.hue.set_light:
@@ -15,3 +16,4 @@ switch_light_{{ id }}_on:
       - transitiontime: 10
       - light_id: {{ id }}
 {% endfor %}
+#}

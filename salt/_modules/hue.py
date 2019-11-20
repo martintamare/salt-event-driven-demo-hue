@@ -1,32 +1,15 @@
 # -*- coding: utf-8 -*-
-'''
-Connection module for OVH DNS api
-
-.. versionadded:: 2014.7.0
-
-:configuration: See OVH docs and add .ovh.conf in the user directory of the minion owner (usually /root)
-
-:depends: ovh
-'''
-# keep lint from choking on _get_conn and _cache_id
-#pylint: disable=E0602
-
 from __future__ import absolute_import
 
 # Import Python libs
 import logging
-import time
 import random
-import re
 
 # Import salt libs
-import salt.utils.compat
-import salt.utils.odict as odict
+#import salt.utils.compat
+#import salt.utils.odict as odict
 
-from salt.exceptions import (
-    CommandExecutionError,
-    SaltInvocationError,
-)
+from salt.exceptions import CommandExecutionError
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +26,7 @@ __virtualname__ = 'hue'
 
 def __virtual__():
     '''
-    Only load if ovh libraries exist.
+    Only load if phue library exist.
     '''
     if not HAS_HUE:
         return False
@@ -60,6 +43,26 @@ def _get_hue_username(bridge_ip):
         raise CommandExecutionError('No username in pillar for bridge {0}'.format(bridge_ip))
 
     return hue_config[bridge_ip]['username']
+
+
+def get_lights_ids(bridge_ip):
+    """Return an array with light_id."""
+    username = _get_hue_username(bridge_ip)
+    b = Bridge(ip=bridge_ip, username=username)
+    lights_ids = []
+    for light in b.lights:
+        lights_ids.append(light.light_id)
+    return lights_ids
+
+
+def get_lights(bridge_ip):
+    """Return an array with light_id."""
+    username = _get_hue_username(bridge_ip)
+    b = Bridge(ip=bridge_ip, username=username)
+    lights = []
+    for light in b.lights:
+        lights.append(light.name)
+    return lights
 
 
 def get_light_status(bridge_ip, light_id):
